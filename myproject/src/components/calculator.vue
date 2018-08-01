@@ -13,33 +13,33 @@
         </div>
         <div id="bottom" v-focus="true" @keydown="keyDown($event)" tabindex="-1">
             <div class="row">
-                <button @click="display('AC')" class="operator1">AC</button>
-                <button @click="display('+/-')" class="operator1">+/−</button>
-                <button @click="display('%')" class="operator1">%</button>
-                <button @click="display('÷')" class="operator2">÷</button>
+                <button @click="display1('AC')" class="operator1">AC</button>
+                <button @click="display1('+/-')" class="operator1">+/−</button>
+                <button @click="display1('%')" class="operator1">%</button>
+                <button @click="display2('÷')" class="operator2">÷</button>
             </div>
             <div class="row">
-                <button @click="display('7')" class="operator1">7</button>
-                <button @click="display('8')" class="operator1">8</button>
-                <button @click="display('9')" class="operator1">9</button>
-                <button @click="display('×')" class="operator2">×</button>
+                <button @click="display4('7')" class="operator1">7</button>
+                <button @click="display4('8')" class="operator1">8</button>
+                <button @click="display4('9')" class="operator1">9</button>
+                <button @click="display2('×')" class="operator2">×</button>
             </div>
             <div class="row">
-                <button @click="display('4')" class="operator1">4</button>
-                <button @click="display('5')" class="operator1">5</button>
-                <button @click="display('6')" class="operator1">6</button>
-                <button @click="display('-')" class="operator2">−</button>
+                <button @click="display4('4')" class="operator1">4</button>
+                <button @click="display4('5')" class="operator1">5</button>
+                <button @click="display4('6')" class="operator1">6</button>
+                <button @click="display2('-')" class="operator2">−</button>
             </div>
             <div class="row">
-                <button @click="display('1')" class="operator1">1</button>
-                <button @click="display('2')" class="operator1">2</button>
-                <button @click="display('3')" class="operator1">3</button>
-                <button @click="display('+')" class="operator2">+</button>
+                <button @click="display4('1')" class="operator1">1</button>
+                <button @click="display4('2')" class="operator1">2</button>
+                <button @click="display4('3')" class="operator1">3</button>
+                <button @click="display2('+')" class="operator2">+</button>
             </div>
             <div class="row" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                <button @click="display('0')" class="operator1" style="width: 271px;border-bottom-left-radius: 10px;">0</button>
-                <button @click="display('.')" class="operator1">.</button>
-                <button @click="display('=')" class="operator2" style="border-bottom-right-radius: 10px;">=</button>
+                <button @click="display4('0')" class="operator1" style="width: 271px;border-bottom-left-radius: 10px;">0</button>
+                <button @click="display4('.')" class="operator1">.</button>
+                <button @click="display3()" class="operator2" style="border-bottom-right-radius: 10px;">=</button>
             </div>
         </div>
 	</div>
@@ -74,7 +74,7 @@ export default {
         }    
     },
     methods: {
-       display: function(str) {
+       display1: function(str) {
             if(str == 'AC') {
                 this.result = '';
                 this.information = '';
@@ -121,94 +121,87 @@ export default {
                 }
                 return;
             }
-
+        },
+        //加减
+        display2: function(str) {
             if(this.result == '' && this.information == '') {
-                if(str == '+' || str == '-' || str == '×' || str == '÷' || str == '=') {
-                    return;
-                }
             }
             else if(this.result == '' && this.information != '') {
                 let r1 = this.information;
-                if(str == '+' || str == '-' || str == '×' || str == '÷') {
-                    if(this.judgeNum(r1))
-                    {
-                        this.result = r1 + str;
-                        this.information = '';
-                        return;
-                    }
-                    else{
-                        this.result = "invalid input!";
-                        this.information = '';
-                        return;
-                    }
+                if(this.judgeNum(r1))
+                {
+                    this.result = r1 + str;
+                    this.information = '';
                 }
-                else if(str == '=') {
-                    if(this.judgeNum(r1)) {
-                        this.result = r1;
-                        this.information = '';
-                    }
-                    else {
-                        this.result = "invalid input!";
-                        this.information = '';
-                    }
-                    return;
+                else{
+                    this.result = "invalid input!";
+                    this.information = '';
                 }
             }
-            else if(this.result != '' && this.information == '') {
-                if(str == '+' || str == '-' || str == '×' || str == '÷') {
-                    if(this.judgeNum(this.result)){
-                        this.result = this.result + str;
-                        this.information = '';
-                    }
-                    else{
-                        this.result = 'invalid input!';
-                    }
-                    return;
+            else if(this.result != '' && this.information == '') { 
+                if(this.judgeNum(this.result)){
+                    this.result = this.result + str;
+                    this.information = '';
                 }
-                else if(str == '=') {
-                    if(this.judgeNum(this.result)){
-                        this.information = '';
-                    }
-                    else{
-                        this.result = 'invalid input!';
-                    }
-                    return;
-                }
-                else {
-                    let tmp = this.result[this.result.length-1];
-                    if(tmp == '+' || tmp == '-' || tmp == '×' || tmp == '÷') {
-
-                    }
-                    else {
-                        this.result = '';
-                    }
+                else{
+                    this.result = 'invalid input!';
                 }
             }
             else if(this.result != '' && this.information != '') {
-                if(str == '=') {
-                    if(this.judgeNum(this.information))
-                    {
-                        this.calcu();
-                        return;
-                    }
-                    else {
-                        this.result = "invalid input!";
-                        this.information = '';
-                        return;
-                    }
+                if(this.judgeNum(this.information))
+                {
+                    this.calcu();
+                    this.result = this.result + str;
                 }
-                else if(str == '+' || str == '-' || str == '×' || str == '÷') {
-                    if(this.judgeNum(this.information))
-                    {
-                        this.calcu();
-                        this.result = this.result + str;
-                        return;
-                    }
-                    else {
-                        this.result = "invalid input!";
-                        this.information = '';
-                        return;
-                    }	
+                else {
+                    this.result = "invalid input!";
+                    this.information = '';
+                }
+            }
+            return;
+        },
+        display3: function() {
+            if(this.result == '' && this.information == '') {
+            }
+            else if(this.result == '' && this.information != '') {
+                let r1 = this.information;
+                if(this.judgeNum(r1)) {
+                    this.result = r1;
+                    this.information = '';
+                }
+                else {
+                    this.result = "invalid input!";
+                    this.information = '';
+                }
+            }
+            else if(this.result != '' && this.information == '') {
+                if(this.judgeNum(this.result)){
+                    this.information = '';
+                }
+                else{
+                    this.result = 'invalid input!';
+                }
+            }
+            else if(this.result != '' && this.information != '') {
+                if(this.judgeNum(this.information))
+                {
+                    this.calcu();
+                }
+                else {
+                    this.result = "invalid input!";
+                    this.information = '';
+                }
+            }
+            return;
+        }, 
+        display4: function(str) {
+            if(this.result != '' && this.information == '') {
+                let tmp = this.result[this.result.length-1];
+                if(tmp == '+' || tmp == '-' || tmp == '×' || tmp == '÷') {
+
+                }
+                else {
+                    this.result = '';
                 }
             }
             this.information = this.information+str;
@@ -290,35 +283,35 @@ export default {
         keyDown: function(e) {
             e.preventDefault();
             if(e.keyCode == 187 && e.shiftKey) {
-                this.display('+');
+                this.display2('+');
             }
             else if(e.keyCode == 53 && e.shiftKey) {
-                this.display('%');
+                this.display1('%');
             }
             else if(e.keyCode == 192 && e.shiftKey) {
-                this.display('AC');
+                this.display1('AC');
             }
             else if(e.keyCode == 189 && e.shiftKey) {
-                this.display('+/-');
+                this.display1('+/-');
             }
             else if(e.keyCode == 56 && e.shiftKey) {
-                this.display('×');
+                this.display2('×');
             }
             else if(e && (e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || 
                 e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57) ) {
-                this.display(e.keyCode - 48);
+                this.display4(e.keyCode - 48);
             }
             else if(e && e.keyCode == 189) {
-                this.display('-');
+                this.display2('-');
             }
             else if(e.keyCode == 187 || e.keyCode == 13) {
-                this.display('=');
+                this.display3();
             }
             else if(e && e.keyCode == 191) {
-                this.display('÷');
+                this.display2('÷');
             }
             else if(e && e.keyCode == 190) {
-                this.display('.');
+                this.display4('.');
             }
         }
     }
@@ -328,6 +321,7 @@ export default {
 <style>
     * {
 	    box-sizing: border-box;
+        outline: none;
     }
 
     button{
