@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <Calculator/>
+      <Top/>
   </div>
 </template>
 
 <script>
-import Calculator from './components/calculator'
+import Top from './components/top'
 export default {
   name: 'app',
   components: {
-    Calculator
+    Top
   }
 }
 </script>
@@ -23,4 +23,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>
